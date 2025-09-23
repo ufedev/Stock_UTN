@@ -9,3 +9,11 @@
  * updated_at DATETIME - Lo crea SEQUELIZE automaticamente
  *
  */
+// Guia https://sequelize.org/docs/v6/core-concepts/model-basics/
+// Opción Extending Model
+
+
+
+
+
+

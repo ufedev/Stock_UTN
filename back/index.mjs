@@ -1,3 +1,5 @@
+// GUIA https://expressjs.com/en/guide/routing.html
+
 // Importar Express
 
 
@@ -20,4 +22,5 @@
 
 
 // Iniciar servidor express
+// Dentro de la función hay que agregar sequelize.sync()
 
