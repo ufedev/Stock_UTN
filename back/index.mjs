@@ -4,23 +4,38 @@ import express from "express"
 import dotenv from "dotenv"
 import { sequelize } from './config/db.mjs'
 import { Product } from "./models/products.mjs"
+import cors from 'cors'
 // Crear servidor Express
 const app = express()
 dotenv.config()
 // Agregar a express el soporte para JSON
 app.use(express.json())
+app.use(cors())
 // Crear Ruta GET para obtener productos
 app.get("/", async function(req, res) {
   // de req.query obtenemos todo lo que esta despues
   // de el ? en la url
   // pe: http://localhost:3000/?id=1
   // obtenemos {id:1}
-  res.json(req.query)
+
+  const product = await Product.findAll()
+
+  res.json(product)
+
 })
 // Crear Ruta POST para crear producto
 app.post('/', async (req, res) => {
 
-  res.json(req)
+  const body = req.body
+  const product = new Product({
+    name: body.name,
+    price: Number(body.price),
+    stock: Number(body.stock)
+  })
+  console.log(product)
+  await product.save()
+  res.json("hola")
+
 })
 
 // Crear Ruta PUT para modificar producto

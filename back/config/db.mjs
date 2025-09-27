@@ -6,7 +6,7 @@ import { Sequelize } from 'sequelize'
 
 export const sequelize = new Sequelize(
   "stock",
-  "root",
+  "malfasi",
   "aezakmi",
   {
     dialect: "mysql",
