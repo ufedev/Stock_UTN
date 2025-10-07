@@ -17,31 +17,59 @@ app.get("/", async function(req, res) {
   // de el ? en la url
   // pe: http://localhost:3000/?id=1
   // obtenemos {id:1}
+  try {
+    const products = await Product.findAll()
+    res.json({
+      error: false,
+      data: products
+    })
+  } catch {
+    res.json({
+      error: true,
+      msg: "No se pudieron cargar los productos"
+    })
+  }
 
-  const product = await Product.findAll()
-
-  res.json(product)
 
 })
 // Crear Ruta POST para crear producto
 app.post('/', async (req, res) => {
 
-  const body = req.body
-  const product = new Product({
-    name: body.name,
-    price: Number(body.price),
-    stock: Number(body.stock)
-  })
-  console.log(product)
-  await product.save()
-  res.json("hola")
+  try {
+    const body = req.body
+    if (Object.values(body).includes("")) {
+      res.json({
+        error: true,
+        msg: "Todos los campos son obligatorios"
+      })
+      return
+    }
+    const product = new Product({
+      name: body.name,
+      price: Number(body.price),
+      stock: Number(body.stock)
+    })
+    await product.save()
+    res.json({
+      error: false,
+      msg: "Producto cargado"
+    })
+  } catch (err) {
+    res.json({
+      error: true,
+      msg: err.message
+    })
+  }
 
 })
 
 // Crear Ruta PUT para modificar producto
 
 app.put("/", async (req, res) => {
-  res.json("ruta put")
+
+  const query = req.query
+
+  res.json(query)
 })
 
 // Crear Ruta DELETE para eliminar un producto
