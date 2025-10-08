@@ -26,7 +26,36 @@ export const ProductList = () => {
 
 
   async function handleDelete(id) {
-    toast.info(`${id} fue eliminado`)
+    const x = confirm("Desea eliminar el producto")
+
+    if (!x) {
+      toast.info("❌ Producto no eliminado")
+      return
+    }
+
+    try {
+      const url = `http://localhost:3000/?id=${id}`
+      const config = {
+        method: 'DELETE',
+        headers: {
+          accept: "application/json"
+        }
+
+      }
+      const req = await fetch(url, config)
+      const res = await req.json()
+
+      if (res.error) {
+        toast.error(res.msg)
+        return
+      }
+
+      toast.info("👌 Producto eliminado correctamente")
+      location.reload()
+    } catch {
+      toast.error("Ocurrio un error inesperado")
+    }
+
   }
 
 
