@@ -9,6 +9,7 @@ function App() {
       <Routes>
         <Route path="/" element={<ProductList />} />
         <Route path="/product" element={<ProductForm />} />
+        <Route path="/product/:id" element={<ProductForm />} />
         <Route path="*" element={<h1>404 no encontrado</h1>} />
       </Routes>
       <ToastContainer

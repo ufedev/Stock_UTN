@@ -5,6 +5,7 @@ import dotenv from "dotenv"
 import { sequelize } from './config/db.mjs'
 import { Product } from "./models/products.mjs"
 import cors from 'cors'
+import { where } from "sequelize"
 // Crear servidor Express
 const app = express()
 dotenv.config()
@@ -63,21 +64,86 @@ app.post('/', async (req, res) => {
 
 })
 
-// Crear Ruta PUT para modificar producto
 
+// Crear Ruta PUT para modificar producto
+app.get("/product", async (req, res) => {
+  const query = req.query
+  try {
+    const product = await Product.findOne({
+      where: {
+        id: query.id
+      }
+    })
+    if (!product) {
+      res.status(404).json({
+        error: true,
+        msg: "Producto no encontrado"
+      })
+      return
+    }
+
+    res.json({
+      error: false,
+      product: product
+    })
+
+  } catch {
+    res.status(500).json({
+      error: true,
+      msg: "Hubo un error en el servidor"
+    })
+  }
+
+
+})
 app.put("/", async (req, res) => {
 
   const query = req.query
+  const body = req.body
 
-  res.json(query)
+  try {
+    const product = await Product.findOne({
+      where: {
+        id: query?.id
+      }
+    })
+
+    if (!product) {
+      res.status(404).json({
+        error: true,
+        msg: "No se puede actualizar, porque no existe"
+      })
+      return
+    }
+
+    product.name = body.name
+    product.stock = body.stock
+    product.price = body.price
+
+    await product.save()
+
+    res.json({
+      error: false,
+      msg: "Producto actualizado"
+    })
+
+
+  } catch {
+    res.status(500).json({
+      error: true,
+      msg: "Ocurrio un error al actualizar"
+    })
+  }
+
 })
 
 // Crear Ruta DELETE para eliminar un producto
 app.delete("/", async (req, res) => {
-  // https://localhost/?id=12313
+  // https://localhost/?id=12313&nombre=Fede
   // Recuperamos en el backend de req.query
-  //req.query={
-  //   id:12313
+  // req.query={
+  //   id:12313,
+  //   nombre:"Fede"
   // }
   const query = req.query
   try {
